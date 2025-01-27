@@ -1,3 +1,7 @@
+# Model Context Protocol with mod-cli for OpenAI and Ollama
+
+![Architecture](Architecture.png)
+
 # Model Context Protocol CLI
 This repository contains a protocol-level CLI designed to interact with a Model Context Protocol server. The client allows users to send commands, query data, and interact with various resources provided by the server.
 
