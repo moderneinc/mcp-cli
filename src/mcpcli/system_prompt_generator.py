@@ -39,6 +39,7 @@ class SystemPromptGenerator:
 
         # set the user system prompt
         user_system_prompt = user_system_prompt or self.default_user_system_prompt
+        print(user_system_prompt)
 
         # set the tools config
         tool_config = tool_config or self.default_tool_config

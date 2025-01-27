@@ -10,6 +10,7 @@ from rich.prompt import Prompt
 from mcpcli.llm_client import LLMClient
 from mcpcli.system_prompt_generator import SystemPromptGenerator
 from mcpcli.tools_handler import convert_to_openai_tools, fetch_tools, handle_tool_call
+from mcpcli.messages.send_prompts import send_prompts_list
 
 async def get_input(prompt: str):
     """Get input asynchronously."""
@@ -20,16 +21,22 @@ async def handle_chat_mode(server_streams, provider="openai", model="gpt-4o-mini
     """Enter chat mode with multi-call support for autonomous tool chaining."""
     try:
         tools = []
+        prompt = ""
         for read_stream, write_stream in server_streams:
             tools.extend(await fetch_tools(read_stream, write_stream))
+            response = await send_prompts_list(read_stream, write_stream)
+            prompt = response.get("prompts", [])[0] if response else ""
+            
 
         # for (read_stream, write_stream) in server_streams:
         # tools = await fetch_tools(read_stream, write_stream)
         if not tools:
             print("[red]No tools available. Exiting chat mode.[/red]")
             return
+        
 
-        system_prompt = generate_system_prompt(tools)
+
+        system_prompt = generate_system_prompt(tools, prompt)
         openai_tools = convert_to_openai_tools(tools)
         client = LLMClient(provider=provider, model=model)
         conversation_history = [{"role": "system", "content": system_prompt}]
@@ -115,7 +122,7 @@ async def process_conversation(
         break
 
 
-def generate_system_prompt(tools):
+def generate_system_prompt(tools, user_system_prompt=""):
     """
     Generate a concise system prompt for the assistant.
 
@@ -124,7 +131,7 @@ def generate_system_prompt(tools):
     prompt_generator = SystemPromptGenerator()
     tools_json = {"tools": tools}
 
-    system_prompt = prompt_generator.generate_prompt(tools_json)
+    system_prompt = prompt_generator.generate_prompt(tools_json, user_system_prompt)
     system_prompt += """
 
 **GENERAL GUIDELINES:**
