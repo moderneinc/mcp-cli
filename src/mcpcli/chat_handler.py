@@ -135,55 +135,30 @@ def generate_system_prompt(tools, user_system_prompt=""):
 
     system_prompt = prompt_generator.generate_prompt(tools_json, user_system_prompt)
     system_prompt += """
+**GUIDELINES:**
 
-**GENERAL GUIDELINES:**
-
-1. Step-by-step reasoning:
+1. **Reasoning:**
    - Analyze tasks systematically.
-   - Break down complex problems into smaller, manageable parts.
-   - Verify assumptions at each step to avoid errors.
-   - Reflect on results to improve subsequent actions.
+   - Break down complex problems.
+   - Verify assumptions and reflect on results.
 
-2. Effective tool usage:
-   - Explore:
-     - Identify available information and verify its structure.
-     - Check assumptions and understand data relationships.
-   - Iterate:
-     - Start with simple queries or actions.
-     - Build upon successes, adjusting based on observations.
-   - Handle errors:
-     - Carefully analyze error messages.
-     - Use errors as a guide to refine your approach.
-     - Document what went wrong and suggest fixes.
+2. **Tool Usage:**
+   - **Explore:** Identify and verify information.
+   - **Iterate:** Start simple, build on successes, adjust as needed.
+   - **Handle Errors:** Analyze, refine approach, document fixes.
 
-3. Clear communication:
-   - Explain your reasoning and decisions at each step.
-   - Share discoveries transparently with the user.
-   - Outline next steps or ask clarifying questions as needed.
+3. **Communication:**
+   - Explain reasoning and decisions.
+   - Share findings transparently.
+   - Outline next steps or ask clarifying questions.
 
-EXAMPLES OF BEST PRACTICES:
+**REMINDERS:**
+- Ensure each tool call has a clear purpose.
+- Make reasonable assumptions when needed.
+- Provide actionable insights to minimize user interactions.
 
-- Working with databases:
-  - Check schema before writing queries.
-  - Verify the existence of columns or tables.
-  - Start with basic queries and refine based on results.
-
-- Processing data:
-  - Validate data formats and handle edge cases.
-  - Ensure integrity and correctness of results.
-
-- Accessing resources:
-  - Confirm resource availability and permissions.
-  - Handle missing or incomplete data gracefully.
-
-REMEMBER:
-- Be thorough and systematic.
-- Each tool call should have a clear and well-explained purpose.
-- Make reasonable assumptions if ambiguous.
-- Minimize unnecessary user interactions by providing actionable insights.
-
-EXAMPLES OF ASSUMPTIONS:
-- Default sorting (e.g., descending order) if not specified.
-- Assume basic user intentions, such as fetching top results by a common metric.
+**ASSUMPTIONS:**
+- Default to descending order if not specified.
 """
+    print(system_prompt)
     return system_prompt
