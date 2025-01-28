@@ -16,8 +16,8 @@ class SystemPromptGenerator:
         String and scalar parameters should be specified as is, while lists and objects should use JSON format. Note that spaces for string values are not stripped. The output is not expected to be valid XML and is parsed with regular expressions.
         Here are the functions available in JSONSchema format:
         {{ TOOL DEFINITIONS IN JSON SCHEMA }}
+
         {{ USER SYSTEM PROMPT }}
-        {{ TOOL CONFIGURATION }}
         """
         self.default_user_system_prompt = "You are an intelligent assistant capable of using tools to solve user queries effectively."
         self.default_tool_config = "No additional configuration is required."
@@ -37,6 +37,9 @@ class SystemPromptGenerator:
             str: The dynamically generated system prompt.
         """
 
+        if tool_config:
+            raise NotImplementedError("Tool configuration is not added to the system prompt.")
+
         # set the user system prompt
         user_system_prompt = user_system_prompt or self.default_user_system_prompt
 
@@ -52,7 +55,6 @@ class SystemPromptGenerator:
         )
         prompt = prompt.replace("{{ FORMATTING INSTRUCTIONS }}", "")
         prompt = prompt.replace("{{ USER SYSTEM PROMPT }}", user_system_prompt)
-        prompt = prompt.replace("{{ TOOL CONFIGURATION }}", tool_config)
 
         # return the prompt
         return prompt
