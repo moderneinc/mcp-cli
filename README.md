@@ -22,7 +22,7 @@ This repository contains a protocol-level CLI designed to interact with a Model 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/chrishayuk/mcp-cli
+git clone https://github.com/moderneinc/mcp-cli
 cd mcp-cli
 ```
 
@@ -38,11 +38,17 @@ pip install uv
 uv sync --reinstall
 ```
 
+4. Build MCP jar:
+
+Follow the instructions here: https://github.com/moderneinc/moderne-mcp.
+
+Then update the path to the jar in the `server_config.json` file in project root.
+
 ## Usage
 To start the client and interact with the SQLite server, run the following command:
 
 ```bash
-uv run mcp-cli --server sqlite
+uv run mcp-cli --server moderne
 ```
 
 ### Command-line Arguments
@@ -58,13 +64,13 @@ uv run mcp-cli --server sqlite
 Run the client with the default OpenAI provider and model:
 
 ```bash
-uv run mcp-cli --server sqlite
+uv run mcp-cli --server moderne
 ```
 
 Run the client with a specific configuration and Ollama provider:
 
 ```bash
-uv run mcp-cli --server sqlite --provider ollama --model llama3.2
+uv run mcp-cli --server moderne --provider ollama --model llama3.2
 ```
 
 Run the client with the default OpenAI provider and model, with all the servers in the config provided:
@@ -89,7 +95,7 @@ The client supports interactive mode, allowing you to execute commands dynamical
 ### Chat Mode
 To enter chat mode and interact with the server:
 
-uv run mcp-cli --server sqlite
+`uv run mcp-cli --server moderne`
 
 In chat mode, you can use tools and query the server interactively. The provider and model used are specified during startup and displayed as follows:
 
