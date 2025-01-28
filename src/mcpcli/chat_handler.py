@@ -10,7 +10,7 @@ from rich.prompt import Prompt
 from mcpcli.llm_client import LLMClient
 from mcpcli.system_prompt_generator import SystemPromptGenerator
 from mcpcli.tools_handler import convert_to_openai_tools, fetch_tools, handle_tool_call
-from mcpcli.messages.send_prompts import send_prompts_list
+from mcpcli.messages.send_prompt import send_prompts_get
 
 async def get_input(prompt: str):
     """Get input asynchronously."""
@@ -24,8 +24,9 @@ async def handle_chat_mode(server_streams, provider="openai", model="gpt-4o-mini
         prompt = ""
         for read_stream, write_stream in server_streams:
             tools.extend(await fetch_tools(read_stream, write_stream))
-            response = await send_prompts_list(read_stream, write_stream)
-            prompt = response.get("prompts", [])[0] if response else ""
+
+            response = await send_prompts_get("analyzeAndRefactorCode", {}, read_stream, write_stream)
+            prompt = response.get("messages", [])[0].get("content", "").get("text", "") if response else ""
             
 
         # for (read_stream, write_stream) in server_streams:
@@ -128,6 +129,7 @@ def generate_system_prompt(tools, user_system_prompt=""):
 
     This prompt is internal and not displayed to the user.
     """
+
     prompt_generator = SystemPromptGenerator()
     tools_json = {"tools": tools}
 
